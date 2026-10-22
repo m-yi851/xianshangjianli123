@@ -1,0 +1,69 @@
+/* Motion layers stay separate; only transforms, opacity and clip-path interpolate. */
+.portfolio-site{overflow-x:clip}
+.reveal-mask{display:block;padding-block:.13em;margin-block:-.13em;clip-path:inset(0% 0% 0% 0%)}
+.reveal-line{display:block;transform-origin:0% 100%}
+.motion-text{display:inline}
+.motion-glyph{display:inline-block}
+.hero h1 .hero-line{overflow:visible;max-width:100%;transform-origin:0% 100%}
+.hero h1 .reveal-line{white-space:nowrap}
+.motion-heading .reveal-line{white-space:nowrap}
+.motion-heading{position:relative}
+.contact-title h2>.reveal-mask{color:var(--cream)}
+.contact-accent{color:var(--red)}
+.hero-endnote{display:flex;align-items:center;gap:27px}
+.hero-motto{font-size:8px;letter-spacing:1.8px;color:#d5bda0}
+.ambient-particles{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;opacity:.6}
+.hero-parallax{position:absolute;left:0;right:0;top:-6%;height:112%}
+.portrait-parallax{position:absolute;left:0;right:0;top:-6%;height:112%}
+.project-cover-reveal{position:absolute;inset:0;display:block;overflow:hidden;border-radius:inherit}
+.project-parallax{position:absolute;left:0;right:0;top:-6%;height:112%;display:block}
+.project-pointer{position:absolute;inset:0 -14px;display:block}
+.project-pointer img{width:100%;height:100%;object-fit:cover}
+.project-grid,.strength-grid,.timeline{perspective:1400px}
+.portrait-card{transform-origin:50% 80%;perspective:1400px}
+.project-card,.strength-card{transform-origin:50% 90%}
+.project-visual img{transition:none}
+.project-visual:hover img{transform:none;filter:sepia(.2) saturate(.7) brightness(.85)}
+.project-visual,.project-play,.strength-card,.button,.primary,.header-contact,.wechat-qr{transition-property:transform,opacity,clip-path;transition-duration:.65s;transition-timing-function:cubic-bezier(.22,1,.36,1)}
+.strength-card:hover{transform:none}
+.project-visual:hover .project-play{transform:translate(-50%,-50%) scale(1.08)}
+.project-03 .project-visual:hover .project-play{transform:scale(1.08)}
+.button,.header-contact{position:relative;overflow:hidden;isolation:isolate}
+.button::before,.header-contact::before{content:"";position:absolute;inset:0;z-index:-1;background:#ff3c59;transform:scaleX(0);transform-origin:left center;transition:transform .72s cubic-bezier(.22,1,.36,1);border-radius:inherit;pointer-events:none}
+.button:hover::before,.button:focus-visible::before,.header-contact:hover::before,.header-contact:focus-visible::before{transform:scaleX(1)}
+.button:hover,.primary:hover{box-shadow:0 4px 28px #ff00522e}
+.header-contact:hover{background:#ffffff0a}
+.nav a::after{content:"";position:absolute;height:1px;left:4px;right:4px;bottom:13px;background:var(--red);transform:scaleX(0);transform-origin:left center;transition:transform .6s cubic-bezier(.22,1,.36,1)}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1)}
+.site-header{position:fixed;border-bottom:0;isolation:isolate}
+.header-glass{position:absolute;inset:0 -24px;z-index:-1;border:1px solid #c29a6430;border-top:0;border-radius:0 0 18px 18px;background:#170f0de8;backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform-origin:center top;pointer-events:none}
+.site-header[data-compact="true"]{pointer-events:none}
+.site-header[data-compact="true"]>a,.site-header[data-compact="true"]>nav,.site-header[data-compact="true"]>button{pointer-events:auto}
+.site-header[data-compact="true"] .nav.open{pointer-events:auto}
+.site-header .nav,.site-header .wordmark,.site-header .header-contact,.site-header .menu-toggle{flex-shrink:0}
+
+@media(max-width:1100px){.hero-endnote{gap:13px}.hero-motto{font-size:6px;letter-spacing:1px}}
+@media(min-width:1101px) and (max-height:820px){
+  .hero-content{padding-top:155px}
+  .hero h1{font-size:clamp(132px,11vw,165px);margin-bottom:24px}
+  .hero-eyebrow{margin-bottom:24px}
+  .hero-copy{margin-bottom:26px}
+}
+@media(max-width:767px){
+  .ambient-particles{display:none}
+  .hero-parallax,.portrait-parallax,.project-parallax{top:0;height:100%}
+  .project-grid,.strength-grid,.timeline,.portrait-card{perspective:none}
+  .hero-motto{display:none}
+  .hero-endnote{gap:0}
+  .motion-heading .reveal-line{white-space:normal}
+  .contact-title .reveal-line{white-space:nowrap}
+  .header-glass{inset-inline:-12px;border-radius:0 0 12px 12px}
+  .site-header[data-compact="true"] .nav.open{top:65px}
+}
+@media(prefers-reduced-motion:reduce){
+  .ambient-particles{display:none}
+  .hero-parallax,.portrait-parallax,.project-parallax{top:0;height:100%}
+  .reveal-mask{clip-path:none}
+  .motion-glyph,.reveal-line{transform:none!important}
+  .button::before,.header-contact::before,.nav a::after{transition:none}
+}

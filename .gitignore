@@ -7,3 +7,11 @@ node_modules
 # Generated files
 .psci
 output
+
+# Portfolio local outputs
+node_modules/
+dist/
+tmp/
+*.local
+AGENT_LOG/
+preview-*.jpg
