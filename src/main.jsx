@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { profile, experiences, strengths, skills, asset } from './content';
+import { profile, experiences, strengths, asset } from './content';
 import { MotionText, RevealLine, MetricValue } from './MotionText';
 import AmbientParticles from './AmbientParticles';
 import FilmArchive from './FilmArchive';
@@ -108,8 +108,6 @@ function App() {
 
       <section id="expertise" className="expertise section wrap"><SectionLabel number="04">MY CREATIVE DNA</SectionLabel><div className="expertise-heading"><h2 className="motion-heading" aria-label="让创意落地，让内容生长。"><RevealLine><MotionText>让创意落地，</MotionText></RevealLine><RevealLine><span className="serif-accent"><MotionText>让内容生长。</MotionText></span></RevealLine></h2><p>产品理解、选题嗅觉、IP 打造、AI 提效。<br/>把策划、制作、运营连接成完整链路。</p></div>
         <div className="strength-grid resume-strengths">{strengths.map(item => <article className="strength-card" key={item.no}><div className="strength-top"><span>{item.no} /</span><span>{item.en}</span></div><div className="strength-symbol" aria-hidden="true">{item.mark}</div><h3>{item.title}</h3><p>{item.text}</p><div className="strength-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>)}</div>
-        <div className="skills-block"><div className="eyebrow">TOOLS OF THE TRADE / 专业技能</div><div className="skills-grid">{skills.map(item => <article className="skill-card" key={item.title}><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></div>
-        <div className="creative-note"><span>“</span><p>让内容有方法，<br/>让创意<span>有落地的路径。</span></p><small>WANG CONGCONG / CREATIVE NOTES</small></div>
       </section>
 
       <section id="contact" className="contact"><div className="contact-orbit" aria-hidden="true"/><div className="contact-inner wrap"><SectionLabel number="05">LET'S MAKE SOMETHING</SectionLabel><div className="contact-title"><span>下一个故事，</span><h2 className="motion-heading contact-invitation" aria-label="让我们一起进行。"><RevealLine><MotionText>让我们</MotionText></RevealLine><RevealLine><span className="contact-accent"><MotionText>一起进行。</MotionText></span><Arrow diagonal/></RevealLine></h2></div><div className="contact-bottom"><div><div className="eyebrow">从一个想法开始，期待你的来信。</div><a className="email-link" href={`mailto:${profile.email}`}>{profile.email}<Arrow diagonal/></a><div className="contact-actions"><button className="button primary" onClick={copyEmail}>复制邮箱 <Arrow diagonal/></button><a className="phone-link" href={`tel:${profile.phone}`}>电话 {profile.phone}</a></div></div><div className="contact-wechat"><h3>微信联系</h3><a className="wechat-qr" href={asset('wechat-qr.jpg')} target="_blank" rel="noopener noreferrer" aria-label="打开微信二维码原图"><img src={asset('wechat-qr.jpg')} alt="微信联系二维码，扫码添加王聪聪" width="636" height="740" loading="lazy" /></a><p>扫码添加微信 · 点击查看原图</p></div></div><footer><span>© {new Date().getFullYear()} WANG CONGCONG</span><span>每一帧，都是新的开始。</span><a href="#home">返回顶部 ↑</a></footer></div></section>

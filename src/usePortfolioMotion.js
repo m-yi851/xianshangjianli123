@@ -155,8 +155,6 @@ export function usePortfolioMotion(rootRef, filter, expandedExperience) {
           .fromTo(card.querySelector('.strength-symbol'), { rotation: -35, scale: .6 }, { rotation: 0, scale: 1, duration: 1.5, ease: 'expo.out', clearProps: 'transform' }, .15)
           .fromTo(card.querySelector('h3'), { y: 35, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.1 }, .2);
       }));
-      all('.skill-card').forEach((card, index) => onceTimeline(`skill:${index}`, card, timeline => timeline.fromTo(card, { y: desktop ? 48 : 30, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.1 })));
-      onceTimeline('note', query('.creative-note'), timeline => timeline.fromTo('.creative-note p', { y: 60, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.25 }));
 
       // Image and pointer layers are independent: scroll never overwrites mouse movement.
       function imageParallax(layer, trigger) {
