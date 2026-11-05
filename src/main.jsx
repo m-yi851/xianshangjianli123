@@ -15,6 +15,7 @@ function SectionLabel({ children, number }) { return <div className="section-lab
 
 function App() {
   const [filter, setFilter] = useState('全部案例');
+  const [experienceIndex, setExperienceIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState('home');
@@ -26,7 +27,7 @@ function App() {
   const dialogRef = useRef(null);
   const triggerRef = useRef(null);
   const toastTimer = useRef(null);
-  usePortfolioMotion(siteRef, filter);
+  usePortfolioMotion(siteRef, filter, experienceIndex);
 
   useEffect(() => { heroVideo.current.dataset.userPaused = String(paused); }, [paused]);
 
@@ -111,7 +112,11 @@ function App() {
         </div>
         <div className="experience-block">
           <div className="experience-intro"><span className="eyebrow">MY JOURNEY / 工作经历</span><h3 className="motion-heading" aria-label="4年经历，连接内容与生意。"><RevealLine><MotionText>4年经历，</MotionText></RevealLine><RevealLine><MotionText>连接内容</MotionText></RevealLine><RevealLine><span className="serif-accent"><MotionText>与生意。</MotionText></span></RevealLine></h3><p>从选题到内容，<br/>从账号增长到商业转化。</p><div className="journey-tags" aria-label="内容领域"><span>教育内容</span><span>知识 IP</span><span>AI 学习机</span></div><a className="resume-link" href={profile.resume} download="王聪聪-短视频编导.pdf">下载完整简历 <Arrow diagonal /></a></div>
-          <div className="timeline">{experiences.map(item => <article key={item.date}><span className="timeline-dot"/><time>{item.date}</time><div><h4>{item.title}</h4><span className="company">{item.detail}</span><ul className="experience-points">{item.points.map(point => <li key={point.title}><strong>{point.title}</strong><p>{point.text}</p></li>)}</ul></div></article>)}</div>
+          <div className="timeline experience-deck">
+            <div className="deck-heading"><div><span className="deck-kicker">EXPERIENCE COLLECTION</span><p>抽取一段经历，了解我的工作现场。</p></div><span className="deck-count">{String(experienceIndex + 1).padStart(2, '0')} <i>/</i> {String(experiences.length).padStart(2, '0')}</span></div>
+            <div className="deck-stage" aria-live="polite" aria-atomic="true">{experiences.map((item, index) => index === experienceIndex && <article className="experience-card" key={item.date} aria-label={`工作经历 ${index + 1}：${item.detail}`}><div className="experience-card-top"><time>{item.date}</time><span>CAREER / {String(index + 1).padStart(2, '0')}</span></div><div><h4>{item.title}</h4><span className="company">{item.detail}</span><ul className="experience-points">{item.points.map(point => <li key={point.title}><strong>{point.title}</strong><p>{point.text}</p></li>)}</ul></div></article>)}</div>
+            <div className="deck-controls"><div className="deck-dots" aria-label="选择工作经历">{experiences.map((item, index) => <button key={item.date} type="button" className={index === experienceIndex ? 'active' : ''} aria-label={`查看${item.detail}工作经历`} aria-pressed={index === experienceIndex} onClick={() => setExperienceIndex(index)} />)}</div><span className="deck-hint">切换卡片，查看完整经历</span><button type="button" className="deck-arrow" aria-label="上一段工作经历" onClick={() => setExperienceIndex((experienceIndex - 1 + experiences.length) % experiences.length)}>←</button><button type="button" className="deck-next" aria-label="下一段工作经历" onClick={() => setExperienceIndex((experienceIndex + 1) % experiences.length)}>抽取下一张 <span>↗</span></button></div>
+          </div>
         </div>
       </section>
 

@@ -11,7 +11,7 @@ const OPEN_CLIP = 'inset(0% 0% 0% 0%)';
 const BOTTOM_CLIP = 'inset(100% 0% 0% 0%)';
 const SIDE_CLIP = 'inset(0% 100% 0% 0%)';
 
-export function usePortfolioMotion(rootRef, filter) {
+export function usePortfolioMotion(rootRef, filter, experienceIndex) {
   const played = useRef(new Set());
   const openingPlayed = useRef(false);
   const rebuildCards = useRef(() => {});
@@ -142,7 +142,7 @@ export function usePortfolioMotion(rootRef, filter) {
         titleReveal(timeline, query('.experience-intro .motion-heading'));
         timeline.fromTo('.experience-intro > p', { y: 35, opacity: 0 }, { y: 0, opacity: 1 }, .75)
           .fromTo('.journey-tags, .experience-intro .resume-link', { y: 25, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .12 }, .9)
-          .fromTo('.timeline article', { y: desktop ? 60 : 30, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .16 }, .9);
+          .fromTo('.experience-deck', { y: desktop ? 60 : 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.05 }, .9);
       });
       onceTimeline('strengths', query('.strength-grid'), timeline => timeline.fromTo('.strength-card', { y: desktop ? 60 : 35, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .18, duration: 1.2 }));
       onceTimeline('skills', query('.skills-grid'), timeline => timeline.fromTo('.skill-card', { y: desktop ? 48 : 30, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .12, duration: 1.1 }));
@@ -210,4 +210,5 @@ export function usePortfolioMotion(rootRef, filter) {
   }, [rootRef]);
 
   useLayoutEffect(() => { rebuildCards.current(); }, [filter]);
+  useLayoutEffect(() => { ScrollTrigger.refresh(); }, [experienceIndex]);
 }
