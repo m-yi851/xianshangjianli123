@@ -144,6 +144,7 @@ export function usePortfolioMotion(rootRef, filter) {
           .fromTo('.timeline article', { y: desktop ? 60 : 30, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .16 }, .9);
       });
       onceTimeline('strengths', query('.strength-grid'), timeline => timeline.fromTo('.strength-card', { y: desktop ? 60 : 35, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .18, duration: 1.2 }));
+      onceTimeline('skills', query('.skills-grid'), timeline => timeline.fromTo('.skill-card', { y: desktop ? 48 : 30, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .12, duration: 1.1 }));
       onceTimeline('note', query('.creative-note'), timeline => timeline.fromTo('.creative-note p', { y: 60, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.25 }));
 
       // Image and pointer layers are independent: scroll never overwrites mouse movement.

@@ -1,31 +1,85 @@
 export const asset = filename => `${import.meta.env.BASE_URL}assets/${filename}`;
 
-// 所有展示资料集中在此维护。作品名称尚未提供，暂用原文件编号。
+// 简历同步：经历、数据及案例来自用户提供的《王聪聪-短视频编导.pdf》。
 export const profile = {
-  name: '王聪聪',
-  englishName: 'WANG CONGCONG',
-  role: '短视频编导 / AIGC 编导',
-  city: '天津',
-  email: '1904578838@qq.com',
-  phone: '19833199685',
-  introduction: '我是王聪聪，专注短视频与 AIGC 影像创作。从一个想法出发，寻找合适的叙事、画面与节奏，把创意变成可以被看见的作品。',
-  background: '物联网工程专业出身，拥有用户运营与独立项目实践背景。我希望把对用户的理解、技术思维与影像表达连接起来，探索更多创作可能。',
+  name: '王聪聪', englishName: 'WANG CONGCONG', role: '短视频编导 / 内容运营',
+  age: '26 岁', education: '本科', availability: '随时到岗',
+  email: '1904578838@qq.com', phone: '19833199685', resume: asset('wang-congcong-resume.pdf'),
+  introduction: '拥有三年编导运营经验，专注教育赛道的内容策划、IP 打造与账号增长。从目标人群与产品理解出发，完成选题、脚本、拍摄剪辑、多平台分发和数据复盘。',
+  background: '擅长从评论区、私信和热点中提炼真实需求，设计开头 3 秒钩子与内容埋点，建立爆款拆解 SOP 与元素复用库。基于 Agent 平台自建 3 个工作流 Skill，覆盖对标拆解、选题库搭建和文案框架质控。',
+  stats: [
+    { value: '5.6w', label: '单月涨粉' },
+    { value: '15%→32%', label: '账号完播率提升' },
+    { value: '03', label: '自建 AI 工作流 Skill' },
+  ],
 };
 
 export const projects = [
-  { id: '01', title: '作品 01', subtitle: '让画面，展开叙事。', category: '视频作品', type: 'video', media: asset('project-01.mp4'), poster: asset('project-01.jpg'), duration: '02:18', format: '9:16 / VIDEO', description: '完整视频作品 · 点击播放，查看原有叙事与影像节奏。', note: '作品名称、项目背景与本人职责待补充。' },
-  { id: '02', title: '作品 02', subtitle: '每一帧，都有表达。', category: '视频作品', type: 'video', media: asset('project-02.mp4'), poster: asset('project-02.jpg'), duration: '01:26', format: '9:16 / VIDEO', description: '完整视频作品 · 用影像呈现创意，留下感受。', note: '作品名称、项目背景与本人职责待补充。' },
-  { id: '03', title: '爱人错过', subtitle: '故事落在，人与人的瞬间。', category: '影像摄影', type: 'image', media: asset('project-03.jpg'), poster: asset('project-03.jpg'), duration: 'STILL', format: '16:9 / PHOTOGRAPHY', description: '摄影作品 · 作品图署名：摄影 / 王聪聪。', note: '当前提供的是作品图片，暂无对应视频。' },
+  {
+    id: '01', title: '理学·亮亮聊思维', subtitle: '初中数学思维 IP · 人设、内容与转化闭环',
+    category: '账号增长', type: 'image', media: asset('case-math.jpg'), poster: asset('case-math.jpg'),
+    duration: '126.5 万粉', format: 'IP / CONTENT / GROWTH', url: 'https://v.douyin.com/k6ebaz2gIGo/',
+    description: '提炼「陪读型方法老师」人设，围绕初中学生及家长建立内容矩阵、发布 SOP 与私域承接链路。',
+    note: '账号截图和数据来自本次简历，反映简历记录时的状态。',
+    highlights: ['340+ 条内容', '单条均赞 1.43万 → 3.45万'],
+    details: [
+      { title: 'IP 人设策划', text: '围绕家长「怕孩子听不懂」的焦虑，提炼「陪读型方法老师」差异化人设。按身份、能力、表达、信任四层重构主页，以「十秒获思路」与 110 个几何模型作价值承诺，用「进群领资料」降低咨询门槛。' },
+      { title: '内容 SOP', text: '搭建教材梳理、模型专题、考点大盘点、情绪人设四维矩阵，统一五段式口播模板、18 点发布和上下集成套排期，累计产出 340+ 条内容。' },
+      { title: '增长运营', text: '布局模型名、考点、年级长尾关键词，联动推荐与搜索。以高频内容结合校历节点，将月更由单条提升至 2—3 条，单条均赞由 1.43 万升至 3.45 万；覆盖开学季、月考、期中、中考四类节点，账号沉淀 126.5 万粉。' },
+      { title: '转化落地', text: '以免费提分资料包引流，打通短视频种草、大盘点深度转化、私信／粉丝群承接、站外课程签单。覆盖引流品、筛选品、利润品，按年级与教材版本分流承接。' },
+    ],
+  },
+  {
+    id: '02', title: '学而思官方旗舰店', subtitle: 'AI 学习机 · 内容策划与全域分发',
+    category: '品牌内容', type: 'image', media: asset('case-xueersi.jpg'), poster: asset('case-xueersi.jpg'),
+    duration: '教育硬件', format: 'STRATEGY / PRODUCTION / CONVERSION', url: 'https://v.douyin.com/Z0QThROOeSA/',
+    description: '从家长辅导痛点出发，梳理剧情、学科短课、真机演示和直播切片，建立策划、拍摄与复盘流程。',
+    note: '账号截图来自本次简历；任职期间的个人职责及参与范围见工作经历。',
+    highlights: ['剧情 / 讲解 / 演示', '策划 → 拍摄 → 复盘'],
+    details: [
+      { title: '内容策划', text: '结合家长辅导痛点、学期节点与新品发布，拆解剧情、学科短课、真机演示和直播切片的策划逻辑。' },
+      { title: '内容 SOP', text: '提炼「问题收集 → 真机验证 → 脚本策划 → 批量拍摄 → 数据复盘」流程，设计同一选题的剧情、讲解、演示三版拍摄方案。' },
+      { title: '运营模式', text: '梳理日常栏目、学期节点专题、新品集中演示和大促店播的配合方式，明确内容在拉新、建立信任与承接咨询中的分工。' },
+      { title: '转化落地', text: '拆解短视频引流、直播答疑、商品页与客服承接、购后问题回流的路径，分别明确进房、商品点击与支付环节的复盘指标。' },
+    ],
+  },
 ];
 
 export const experiences = [
-  { date: '2026.03 — 2026.06', title: '运营助理 · 实习', detail: '天津津榜提名校外托管服务有限公司', body: '参与用户需求对接、课程排期、数据跟踪与运营流程优化。' },
-  { date: '2024.07 — 2024.09', title: '独立项目实践', detail: '假期补课班 · 项目负责人', body: '从调研、获客到交付，独立推动项目落地，积累资源统筹与执行经验。' },
-  { date: '2024.02 — 2024.06', title: '用户运营专员', detail: '星力宇教育科技发展有限公司', body: '围绕用户需求开展社群运营、内容分享与服务流程建设。' },
+  {
+    date: '2024.06 — 2026.10', title: '短视频运营', detail: '昆明理学教育科技有限公司',
+    points: [
+      { title: '账号运营', text: '负责账号从 0—1 到 125 万粉丝的全流程编导工作，定位初中数学思维赛道，覆盖初一至初三学生及家长。' },
+      { title: '爆款量产', text: '累计产出数十条爆款视频，其中 20w+ 赞内容集中在学期预习、考点盘点；开学季单日涨粉最高 2 万+，平销期日增 1500—3000 粉。' },
+      { title: '栏目打造', text: '打造《十秒获思路》固定 IP 栏目，形成 40—90 秒口播板书讲题模板；以「家长提分模型＋学生解题技巧」构建内容双线。' },
+      { title: '节点营销', text: '建立开学季、期中、期末、寒暑假提前 10 天排期机制。平均每月单条视频可带动数百套教辅销售；淡季留资约 30%，旺季约 30%—50%，旺季单月教辅资料营收 25万—50万元。' },
+      { title: '变现闭环', text: '搭建「短视频橱窗卖教辅 → 直播间引流进群 → 转私域推广线上课」链路，联动主号矩阵导流，复用爆款模型，支撑多账号日更；单月内容产出效率提升 35%，内容爆款率提升 28%。' },
+      { title: '多平台分发', text: '同步运营 B 站、视频号、小红书；以数学思维长视频、图文考点清单适配平台，全域引流回抖音主阵地。' },
+    ],
+  },
+  {
+    date: '2023.04 — 2024.04', title: '新媒体运营 · 短视频运营 / 编导', detail: '北京学而思教育科技有限公司',
+    points: [
+      { title: '账号运营', text: '前半年以运营实习生身份参与 AI 学习机官方旗舰店日常运营，负责排期、评论区维护与热点跟进；参与期间账号粉丝由 92 万增长至 209 万。' },
+      { title: '内容辅助', text: '后半年转编导实习生，协助团队围绕功能实测、场景演示、家长痛点输出选题，参与产出 30 条万赞以上视频。' },
+      { title: '直播配合', text: '配合日常品销播、新品和大促节奏，辅助撰写预热脚本、优化橱窗挂车话术（国补、分期免息、7 天试用），熟悉单场直播间 GMV 破千万级的内容配合链路。' },
+      { title: '竞品调研', text: '跟踪科大讯飞、步步高、猿辅导等账号，输出竞品选题简报，协助形成家长代入、教材对标与学科内容合规的差异化方案。' },
+      { title: '矩阵支持', text: '参与图书、网校、学习机、初高中账号矩阵分发，协助品牌从分散运营转向主阵地集中打爆，适配新品首发与统一价格口径。' },
+      { title: '多平台分发', text: '协助团队完成抖音主号之外的内容分发，按平台调性调整版本，积累全域分发实操经验。' },
+    ],
+  },
 ];
 
 export const strengths = [
-  { no: '01', mark: '✳', en: 'STORY & PEOPLE', title: '从观众出发', text: '把用户运营中的需求理解带入创作，让主题、表达与受众的真实处境产生联系。', tags: ['需求理解', '内容表达'] },
-  { no: '02', mark: '⌘', en: 'AI & IMAGINATION', title: '用技术打开想象', text: '结合技术学习背景，探索 AIGC 在创意构思与影像表达中的应用。', tags: ['AIGC 探索', '技术思维'] },
-  { no: '03', mark: '↗', en: 'IDEA TO EXECUTION', title: '让想法落到实处', text: '拥有独立项目从调研到交付的实践，把目标拆成可执行的步骤，推动协作与落地。', tags: ['项目统筹', '执行推进'] },
+  { no: '01', mark: '↗', en: 'CONTENT TO CONVERSION', title: '从种草到转化', text: '以产品理解为起点，围绕人群痛点、痒点与爽点设计内容，用 A 种 B 收模式打通内容种草、私域沉淀与商业转化。', tags: ['产品理解', '转化闭环'] },
+  { no: '02', mark: '✳', en: 'TOPIC & RETENTION', title: '选题与内容埋点', text: '从评论、私信和热点挖掘需求，每周稳定产出 15—20 个优质选题；通过前 3 秒钩子和内容埋点，将账号完播率从 15% 提升至 32%。', tags: ['用户洞察', '完播优化'] },
+  { no: '03', mark: '◉', en: 'IP & REPEATABLE SYSTEMS', title: '把 IP 做成体系', text: '匹配人设与账号定位，建立爆款拆解 SOP 和元素复用库，用可复用的内容方法提高爆款概率。', tags: ['人设策划', '内容 SOP'] },
+  { no: '04', mark: '⌘', en: 'AI WORKFLOWS', title: '让 AI 进入工作流', text: '自建 3 个 Agent 工作流 Skill：对标账号拆解、评论痛点聚类与选题库搭建、文案框架质控，贯穿选题、脚本和复盘。', tags: ['Agent', '流程提效'] },
+];
+
+export const skills = [
+  { title: '拍摄器材', text: '熟练操作佳能、索尼全系列相机，以及大疆无人机、稳定器等设备。' },
+  { title: '后期制作', text: 'Premiere Pro、After Effects、剪映、DaVinci Resolve；熟悉 libtv、即梦等 AI 生成工具。' },
+  { title: '数据复盘', text: '抖音创作者中心、巨量算数、Excel；围绕完播率、互动率复盘并迭代内容。' },
+  { title: 'AI 工具链', text: 'ChatGPT、Kimi、豆包、通义千问等大模型辅助内容生产。' },
 ];
