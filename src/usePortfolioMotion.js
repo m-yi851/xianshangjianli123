@@ -125,7 +125,7 @@ export function usePortfolioMotion(rootRef, filter, expandedExperience) {
           labelReveal(timeline, section);
           titleReveal(timeline, section.querySelector('.motion-heading'), .1);
           if (section.id === 'about') timeline.fromTo(all('.about-copy > .eyebrow, .about-copy > p, .profile-contacts', section), { y: desktop ? 48 : 30, opacity: 0 }, { y: 0, opacity: 1, stagger: .09, duration: 1 }, .9);
-          if (section.id === 'work') timeline.fromTo(section.querySelector('.filters'), { x: 45, clipPath: SIDE_CLIP }, { x: 0, clipPath: OPEN_CLIP, duration: .9 }, .9);
+          if (section.id === 'work' && section.querySelector('.filters')) timeline.fromTo(section.querySelector('.filters'), { x: 45, clipPath: SIDE_CLIP }, { x: 0, clipPath: OPEN_CLIP, duration: .9 }, .9);
           if (section.id === 'expertise') timeline.fromTo(section.querySelector('.expertise-heading > p'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 1);
           if (section.id === 'contact') {
             timeline.fromTo(section.querySelector('.contact-title > span'), { y: 35, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP }, .3)

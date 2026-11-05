@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { profile, projects, experiences, strengths, skills, asset } from './content';
+import { profile, experiences, strengths, skills, asset } from './content';
 import { MotionText, RevealLine, MetricValue } from './MotionText';
 import AmbientParticles from './AmbientParticles';
+import FilmArchive from './FilmArchive';
 import { usePortfolioMotion } from './usePortfolioMotion';
 import './styles.css';
 import './motion.css';
@@ -15,20 +16,15 @@ function PlayIcon() { return <svg viewBox="0 0 24 24" fill="currentColor" aria-h
 function SectionLabel({ children, number }) { return <div className="section-label"><span className="pill">{children}</span><span className="label-line"/><span className="section-number">/{number}</span></div>; }
 
 function App() {
-  const [filter, setFilter] = useState('全部案例');
   const [expandedExperience, setExpandedExperience] = useState(null);
-  const [selected, setSelected] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState('home');
   const [paused, setPaused] = useState(false);
   const [toast, setToast] = useState('');
-  const [videoError, setVideoError] = useState(false);
   const siteRef = useRef(null);
   const heroVideo = useRef(null);
-  const dialogRef = useRef(null);
-  const triggerRef = useRef(null);
   const toastTimer = useRef(null);
-  usePortfolioMotion(siteRef, filter, expandedExperience);
+  usePortfolioMotion(siteRef, null, expandedExperience);
 
   useEffect(() => { heroVideo.current.dataset.userPaused = String(paused); }, [paused]);
 
@@ -40,21 +36,6 @@ function App() {
     return () => { observer.disconnect(); clearTimeout(toastTimer.current); };
   }, []);
 
-  useEffect(() => {
-    if (!selected) return;
-    dialogRef.current.showModal();
-    heroVideo.current?.pause();
-    const saved = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = saved;
-      if (!paused && !document.hidden && heroVideo.current?.getBoundingClientRect().bottom > 0 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) heroVideo.current?.play().catch(() => {});
-      triggerRef.current?.focus();
-    };
-  }, [selected]);
-
-  const openProject = (project, event) => { triggerRef.current = event.currentTarget; setVideoError(false); setSelected(project); };
-  const closeProject = () => { dialogRef.current?.close(); setSelected(null); };
   const showToast = message => { setToast(message); clearTimeout(toastTimer.current); toastTimer.current = setTimeout(() => setToast(''), 3200); };
   const copyEmail = async () => {
     try { await navigator.clipboard.writeText(profile.email); showToast('邮箱已复制，期待你的来信。'); }
@@ -123,19 +104,7 @@ function App() {
         </div>
       </section>
 
-      <section id="work" className="work section">
-        <div className="wrap"><SectionLabel number="03">SELECTED CASE STUDIES</SectionLabel>
-          <div className="work-heading"><div><div className="eyebrow">从定位与内容，到增长与转化。</div><h2 className="motion-heading" aria-label="作品集"><RevealLine><MotionText>作品</MotionText><span className="serif-accent"><MotionText>集</MotionText></span></RevealLine></h2></div><div className="filters" role="group" aria-label="按案例类型筛选">{['全部案例', '账号增长', '品牌内容'].map(item => <button key={item} aria-pressed={filter === item} className={filter === item ? 'selected' : ''} onClick={() => setFilter(item)}>{item}<span>{String(item === '全部案例' ? projects.length : projects.filter(project => project.category === item).length).padStart(2, '0')}</span></button>)}</div></div>
-          <div className="project-grid account-projects">{projects.filter(project => filter === '全部案例' || project.category === filter).map(project => <article className={`project-card project-${project.id}`} key={project.id} data-project-id={project.id}>
-            <button className="project-visual" onClick={event => openProject(project, event)} aria-label={`查看${project.title}账号截图`}><span className="project-cover-reveal"><span className="project-parallax"><span className="project-pointer"><img src={project.poster} alt={`${project.title}账号截图，摘自简历`} loading="lazy"/></span></span></span><span className="project-shade"/><span className="project-top"><span>NO. {project.id} / {project.category}</span><span>{project.duration}</span></span><span className="project-play"><Arrow diagonal/></span><span className="project-bottom"><span>{project.format}</span><span>VIEW ACCOUNT <Arrow diagonal/></span></span></button>
-            <div className="case-overview"><span className="case-kicker">CASE {project.id} / {project.category}</span><div className="project-caption"><div><h3>{project.title}</h3><p>{project.subtitle}</p></div><a href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`访问${project.title}抖音账号`}><Arrow diagonal/></a></div>
-            <p className="case-summary">{project.description}</p><div className="case-highlights">{project.highlights.map(value => <span key={value}>{value}</span>)}</div>
-            <a className="case-account-link" href={project.url} target="_blank" rel="noopener noreferrer">查看抖音账号 <Arrow diagonal/></a></div>
-            <details className="case-process"><summary><span>查看项目拆解 <small>策略 / 执行 / 转化</small></span><span className="disclosure-plus" aria-hidden="true"/></summary><div className="case-details">{project.details.map((item, index) => <div key={item.title}><span className="case-detail-index" aria-hidden="true">0{index + 1}</span><div><h4>{item.title}</h4><p>{item.text}</p></div></div>)}</div></details>
-          </article>)}</div>
-          <div className="work-footnote"><span>数据及账号截图以所提供简历为准。</span><span>STRATEGY / CONTENT / GROWTH</span></div>
-        </div>
-      </section>
+      <FilmArchive />
 
       <section id="expertise" className="expertise section wrap"><SectionLabel number="04">MY CREATIVE DNA</SectionLabel><div className="expertise-heading"><h2 className="motion-heading" aria-label="让创意落地，让内容生长。"><RevealLine><MotionText>让创意落地，</MotionText></RevealLine><RevealLine><span className="serif-accent"><MotionText>让内容生长。</MotionText></span></RevealLine></h2><p>产品理解、选题嗅觉、IP 打造、AI 提效。<br/>把策划、制作、运营连接成完整链路。</p></div>
         <div className="strength-grid resume-strengths">{strengths.map(item => <article className="strength-card" key={item.no}><div className="strength-top"><span>{item.no} /</span><span>{item.en}</span></div><div className="strength-symbol" aria-hidden="true">{item.mark}</div><h3>{item.title}</h3><p>{item.text}</p><div className="strength-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>)}</div>
@@ -146,7 +115,6 @@ function App() {
       <section id="contact" className="contact"><div className="contact-orbit" aria-hidden="true"/><div className="contact-inner wrap"><SectionLabel number="05">LET'S MAKE SOMETHING</SectionLabel><div className="contact-title"><span>下一个故事，</span><h2 className="motion-heading contact-invitation" aria-label="让我们一起进行。"><RevealLine><MotionText>让我们</MotionText></RevealLine><RevealLine><span className="contact-accent"><MotionText>一起进行。</MotionText></span><Arrow diagonal/></RevealLine></h2></div><div className="contact-bottom"><div><div className="eyebrow">从一个想法开始，期待你的来信。</div><a className="email-link" href={`mailto:${profile.email}`}>{profile.email}<Arrow diagonal/></a><div className="contact-actions"><button className="button primary" onClick={copyEmail}>复制邮箱 <Arrow diagonal/></button><a className="phone-link" href={`tel:${profile.phone}`}>电话 {profile.phone}</a></div></div><div className="contact-wechat"><h3>微信联系</h3><a className="wechat-qr" href={asset('wechat-qr.jpg')} target="_blank" rel="noopener noreferrer" aria-label="打开微信二维码原图"><img src={asset('wechat-qr.jpg')} alt="微信联系二维码，扫码添加王聪聪" width="636" height="740" loading="lazy" /></a><p>扫码添加微信 · 点击查看原图</p></div></div><footer><span>© {new Date().getFullYear()} WANG CONGCONG</span><span>每一帧，都是新的开始。</span><a href="#home">返回顶部 ↑</a></footer></div></section>
     </main>
 
-    {selected && <dialog ref={dialogRef} className="media-dialog" data-lenis-prevent onCancel={closeProject} onClick={event => { if (event.target === dialogRef.current) closeProject(); }} aria-labelledby="dialog-title"><div className="dialog-header"><div><span className="eyebrow">SELECTED WORK / {selected.id}</span><h2 id="dialog-title">{selected.title}</h2></div><button className="close-modal" autoFocus onClick={closeProject} aria-label="关闭作品">×</button></div><div className={`dialog-media ${selected.type === 'image' ? 'image-media' : ''}`}>{selected.type === 'video' ? <video key={selected.id} src={selected.media} poster={selected.poster} controls autoPlay playsInline preload="metadata" onError={() => setVideoError(true)}>你的浏览器不支持视频播放。</video> : <img src={selected.media} alt={`${selected.title}账号截图完整图片`}/>}</div><div className="dialog-description"><p>{selected.description}</p><small>{videoError ? '视频暂时无法加载，请稍后重试。' : selected.note}</small><a className="case-account-link" href={selected.url} target="_blank" rel="noopener noreferrer">访问抖音账号 <Arrow diagonal/></a>{videoError && <a href={selected.media}>打开视频文件 ↗</a>}</div></dialog>}
     <div className={`toast ${toast ? 'show' : ''}`} role="status" aria-live="polite">{toast}</div>
   </div>;
 }
