@@ -141,6 +141,7 @@ export function usePortfolioMotion(rootRef, filter) {
       onceTimeline('experience', query('.experience-block'), timeline => {
         titleReveal(timeline, query('.experience-intro .motion-heading'));
         timeline.fromTo('.experience-intro > p', { y: 35, opacity: 0 }, { y: 0, opacity: 1 }, .75)
+          .fromTo('.journey-tags, .experience-intro .resume-link', { y: 25, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .12 }, .9)
           .fromTo('.timeline article', { y: desktop ? 60 : 30, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .16 }, .9);
       });
       onceTimeline('strengths', query('.strength-grid'), timeline => timeline.fromTo('.strength-card', { y: desktop ? 60 : 35, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .18, duration: 1.2 }));

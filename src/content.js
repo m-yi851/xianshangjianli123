@@ -1,16 +1,16 @@
 export const asset = filename => `${import.meta.env.BASE_URL}assets/${filename}`;
 
-// 简历同步：经历、数据及案例来自用户提供的《王聪聪-短视频编导.pdf》。
+// 经历与案例来自用户简历；工作年限、Skill 数量以用户最新确认口径为准。
 export const profile = {
   name: '王聪聪', englishName: 'WANG CONGCONG', role: '短视频编导 / 内容运营',
   age: '26 岁', education: '本科', availability: '随时到岗',
   email: '1904578838@qq.com', phone: '19833199685', resume: asset('wang-congcong-resume.pdf'),
-  introduction: '拥有三年编导运营经验，专注教育赛道的内容策划、IP 打造与账号增长。从目标人群与产品理解出发，完成选题、脚本、拍摄剪辑、多平台分发和数据复盘。',
-  background: '擅长从评论区、私信和热点中提炼真实需求，设计开头 3 秒钩子与内容埋点，建立爆款拆解 SOP 与元素复用库。基于 Agent 平台自建 3 个工作流 Skill，覆盖对标拆解、选题库搭建和文案框架质控。',
+  introduction: '拥有 4 年编导运营经验，专注教育赛道的内容策划、IP 打造与账号增长。从目标人群与产品理解出发，完成选题、脚本、拍摄剪辑、多平台分发和数据复盘。',
+  background: '擅长从评论区、私信和热点中提炼真实需求，设计开头 3 秒钩子与内容埋点，建立爆款拆解 SOP 与元素复用库。基于 Agent 平台自建 5 个工作流 Skill，覆盖对标拆解、选题库搭建、文案框架质控等环节。',
   stats: [
     { value: '5.6w', label: '单月涨粉' },
-    { value: '15%→32%', label: '账号完播率提升' },
-    { value: '03', label: '自建 AI 工作流 Skill' },
+    { value: '0→125万', label: '账号粉丝增长' },
+    { value: '05', label: '自建 AI 工作流 Skill' },
   ],
 };
 
@@ -74,7 +74,7 @@ export const strengths = [
   { no: '01', mark: '↗', en: 'CONTENT TO CONVERSION', title: '从种草到转化', text: '以产品理解为起点，围绕人群痛点、痒点与爽点设计内容，用 A 种 B 收模式打通内容种草、私域沉淀与商业转化。', tags: ['产品理解', '转化闭环'] },
   { no: '02', mark: '✳', en: 'TOPIC & RETENTION', title: '选题与内容埋点', text: '从评论、私信和热点挖掘需求，每周稳定产出 15—20 个优质选题；通过前 3 秒钩子和内容埋点，将账号完播率从 15% 提升至 32%。', tags: ['用户洞察', '完播优化'] },
   { no: '03', mark: '◉', en: 'IP & REPEATABLE SYSTEMS', title: '把 IP 做成体系', text: '匹配人设与账号定位，建立爆款拆解 SOP 和元素复用库，用可复用的内容方法提高爆款概率。', tags: ['人设策划', '内容 SOP'] },
-  { no: '04', mark: '⌘', en: 'AI WORKFLOWS', title: '让 AI 进入工作流', text: '自建 3 个 Agent 工作流 Skill：对标账号拆解、评论痛点聚类与选题库搭建、文案框架质控，贯穿选题、脚本和复盘。', tags: ['Agent', '流程提效'] },
+  { no: '04', mark: '⌘', en: 'AI WORKFLOWS', title: '让 AI 进入工作流', text: '自建 5 个 Agent 工作流 Skill，涵盖对标账号拆解、评论痛点聚类与选题库搭建、文案框架质控等环节，贯穿选题、脚本和复盘。', tags: ['Agent', '流程提效'] },
 ];
 
 export const skills = [
