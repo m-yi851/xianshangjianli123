@@ -14,6 +14,7 @@ const SIDE_CLIP = 'inset(0% 100% 0% 0%)';
 export function usePortfolioMotion(rootRef, filter, expandedExperience) {
   const played = useRef(new Set());
   const openingPlayed = useRef(false);
+  const initialAnchorHandled = useRef(false);
   const rebuildCards = useRef(() => {});
 
   useLayoutEffect(() => {
@@ -212,6 +213,27 @@ export function usePortfolioMotion(rootRef, filter, expandedExperience) {
       cleanups.push(() => { root.removeEventListener('toggle', onDisclosure, true); disclosureContext.revert(); });
       all('img').forEach(image => { if (!image.complete) { image.addEventListener('load', refresh, { once: true }); cleanups.push(() => image.removeEventListener('load', refresh)); } });
       document.fonts?.ready.then(refresh);
+      // React mounts after the browser's initial fragment lookup. Resolve it once
+      // after layout so shared links open at their section, including on touch.
+      const initialHash = location.hash;
+      let anchorFrame;
+      const restoreAnchor = () => {
+        if (initialAnchorHandled.current) return;
+        initialAnchorHandled.current = true;
+        if (location.hash !== initialHash) return;
+        const target = all('main > section[id]').find(section => `#${section.id}` === initialHash);
+        if (!target || target === hero) return;
+        if (lenis) lenis.scrollTo(target, { immediate: true });
+        else target.scrollIntoView({ block: 'start', behavior: 'instant' });
+        ScrollTrigger.update();
+      };
+      const scheduleAnchor = () => { anchorFrame = requestAnimationFrame(() => { anchorFrame = requestAnimationFrame(restoreAnchor); }); };
+      const cancelAnchor = () => { initialAnchorHandled.current = true; };
+      if (document.readyState === 'complete') scheduleAnchor();
+      else window.addEventListener('load', scheduleAnchor, { once: true });
+      window.addEventListener('wheel', cancelAnchor, { once: true, passive: true });
+      root.addEventListener('pointerdown', cancelAnchor, { once: true });
+      cleanups.push(() => { cancelAnimationFrame(anchorFrame); window.removeEventListener('load', scheduleAnchor); window.removeEventListener('wheel', cancelAnchor); root.removeEventListener('pointerdown', cancelAnchor); });
       cleanups.push(observeMotionVisibility({ root, gsap, lenis, raf, syncHeroVideo: () => { syncHeroVideo(); ScrollTrigger.update(); } }));
       if (!document.hidden) syncHeroVideo();
 

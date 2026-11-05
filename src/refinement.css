@@ -1,5 +1,6 @@
 /* A shared editorial scale, with details available on demand. */
 :root{--body-ink:#c9bcab;--soft-ink:#b9a78f}
+html.lenis{scroll-behavior:auto}
 .section{padding-block:clamp(82px,7vw,125px)}
 .section-label{margin-bottom:clamp(40px,4vw,64px)}
 .eyebrow{line-height:1.85}
