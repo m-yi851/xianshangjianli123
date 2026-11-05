@@ -68,7 +68,7 @@ function App() {
   return <div className="portfolio-site" ref={siteRef}>
     <header className="site-header">
       <div className="header-glass" aria-hidden="true"/>
-      <a className="wordmark" href="#home" aria-label="王聪聪，返回首页">WCC<span>®</span></a>
+      <a className="wordmark wordmark--name" href="#home" aria-label="王聪聪，返回首页">王聪聪</a>
       <nav aria-label="主导航" className={menuOpen ? 'nav open' : 'nav'}>
         {navItems.map(([id, label]) => <a key={id} className={active === id ? 'active' : ''} href={`#${id}`} onClick={() => setMenuOpen(false)}>{label}<i/></a>)}
       </nav>
@@ -86,7 +86,7 @@ function App() {
         <div className="hero-person"><div className="hero-parallax"><img src={asset('portrait-creative.jpg')} alt="王聪聪创意人物形象，原图含 AI 生成标记"/></div><span className="photo-caption">CREATIVE PORTRAIT / AI GENERATED</span></div>
         <div className="hero-content wrap">
           <div className="hero-eyebrow"><span className="live-dot"/> WANG CONGCONG — VISUAL CREATOR</div>
-          <h1 aria-label="MAKE IT REAL."><RevealLine className="hero-line"><MotionText>MAKE</MotionText></RevealLine><RevealLine className="hero-line"><MotionText>{'IT '}</MotionText><em><MotionText>REAL.</MotionText></em><b>↗</b></RevealLine></h1>
+          <h1 className="hero-title" aria-label="短视频编导"><RevealLine className="hero-line"><MotionText>短视频</MotionText></RevealLine><RevealLine className="hero-line"><em><MotionText>编导</MotionText></em><b>↗</b></RevealLine></h1>
           <div className="hero-role">短视频编导 <span>×</span> AIGC 编导</div>
           <p className="hero-copy">让想象有画面，让故事被看见。</p>
           <div className="hero-actions"><a href="#work" className="button primary">进入我的作品 <Arrow /></a><button className="play-teaser" onClick={event => openProject(projects[0], event)}><span className="round-play"><PlayIcon /></span>播放作品 <span className="tiny">02:18</span></button></div>
@@ -95,7 +95,7 @@ function App() {
         <div className="red-horizon"/>
       </section>
 
-      <div className="film-strip" aria-hidden="true"><div>STORYTELLING <span>✳</span> AIGC DIRECTION <span>✳</span> VISUAL CREATION <span>✳</span> STORYTELLING <span>✳</span> AIGC DIRECTION <span>✳</span> VISUAL CREATION <span>✳</span></div></div>
+      <div className="film-strip" aria-hidden="true"><div>{Array.from({ length: 4 }, (_, index) => <React.Fragment key={index}>短视频编导 <span>✳</span> AI 编导 <span>✳</span> </React.Fragment>)}</div></div>
 
       <section id="about" className="about section wrap">
         <SectionLabel number="02">ABOUT THE CREATOR</SectionLabel>
