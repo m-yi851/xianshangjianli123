@@ -11,7 +11,7 @@ const OPEN_CLIP = 'inset(0% 0% 0% 0%)';
 const BOTTOM_CLIP = 'inset(100% 0% 0% 0%)';
 const SIDE_CLIP = 'inset(0% 100% 0% 0%)';
 
-export function usePortfolioMotion(rootRef, filter, experienceIndex) {
+export function usePortfolioMotion(rootRef, filter, expandedExperience) {
   const played = useRef(new Set());
   const openingPlayed = useRef(false);
   const rebuildCards = useRef(() => {});
@@ -70,6 +70,7 @@ export function usePortfolioMotion(rootRef, filter, experienceIndex) {
       }
       compactHeader(scrollY > hero.offsetHeight - 104, true);
       ScrollTrigger.create({ trigger: hero, start: 'bottom top+=104', onEnter: () => compactHeader(true), onLeaveBack: () => compactHeader(false) });
+      gsap.fromTo('.reading-progress > span', { scaleX: 0 }, { scaleX: 1, ease: 'none', scrollTrigger: { trigger: root, start: 'top top', end: 'bottom bottom', scrub: reduced ? true : .4 } });
 
       function spreadGlyphs(line, distance) {
         const glyphs = all('.motion-glyph', line);
@@ -122,7 +123,7 @@ export function usePortfolioMotion(rootRef, filter, experienceIndex) {
         onceTimeline(`section:${section.id}`, section, timeline => {
           labelReveal(timeline, section);
           titleReveal(timeline, section.querySelector('.motion-heading'), .1);
-          if (section.id === 'about') timeline.fromTo(all('.about-copy > .eyebrow, .about-copy > p, .profile-contacts, .stats > div', section), { y: desktop ? 48 : 30, opacity: 0 }, { y: 0, opacity: 1, stagger: .09, duration: 1 }, 1.05);
+          if (section.id === 'about') timeline.fromTo(all('.about-copy > .eyebrow, .about-copy > p, .profile-contacts', section), { y: desktop ? 48 : 30, opacity: 0 }, { y: 0, opacity: 1, stagger: .09, duration: 1 }, .9);
           if (section.id === 'work') timeline.fromTo(section.querySelector('.filters'), { x: 45, clipPath: SIDE_CLIP }, { x: 0, clipPath: OPEN_CLIP, duration: .9 }, .9);
           if (section.id === 'expertise') timeline.fromTo(section.querySelector('.expertise-heading > p'), { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1 }, 1);
           if (section.id === 'contact') {
@@ -138,14 +139,22 @@ export function usePortfolioMotion(rootRef, filter, experienceIndex) {
           .fromTo('.portrait-image', { clipPath: SIDE_CLIP }, { clipPath: OPEN_CLIP, duration: 1.45, ease: 'expo.out' }, .4)
           .fromTo('.portrait-image img', { scale: 1.12 }, { scale: 1, duration: 1.8 }, .4);
       });
+      onceTimeline('metrics', query('.resume-stats'), timeline => {
+        timeline.fromTo('.resume-stats > div', { y: 42, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .14, duration: 1.1 })
+          .fromTo('.metric-reel', { y: 0, yPercent: 0 }, { y: 0, yPercent: -200 / 3, stagger: .045, duration: 1.7, ease: 'expo.out' }, .25);
+      });
       onceTimeline('experience', query('.experience-block'), timeline => {
         titleReveal(timeline, query('.experience-intro .motion-heading'));
         timeline.fromTo('.experience-intro > p', { y: 35, opacity: 0 }, { y: 0, opacity: 1 }, .75)
           .fromTo('.journey-tags, .experience-intro .resume-link', { y: 25, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .12 }, .9)
-          .fromTo('.experience-deck', { y: desktop ? 60 : 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.05 }, .9);
+          .fromTo('.experience-accordion', { y: desktop ? 60 : 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.05 }, .9);
       });
-      onceTimeline('strengths', query('.strength-grid'), timeline => timeline.fromTo('.strength-card', { y: desktop ? 60 : 35, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, stagger: .18, duration: 1.2 }));
-      onceTimeline('skills', query('.skills-grid'), timeline => timeline.fromTo('.skill-card', { y: desktop ? 48 : 30, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .12, duration: 1.1 }));
+      all('.strength-card').forEach((card, index) => onceTimeline(`strength:${index}`, card, timeline => {
+        timeline.fromTo(card, { y: desktop ? 60 : 35, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, duration: 1.2 })
+          .fromTo(card.querySelector('.strength-symbol'), { rotation: -35, scale: .6 }, { rotation: 0, scale: 1, duration: 1.5, ease: 'expo.out', clearProps: 'transform' }, .15)
+          .fromTo(card.querySelector('h3'), { y: 35, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.1 }, .2);
+      }));
+      all('.skill-card').forEach((card, index) => onceTimeline(`skill:${index}`, card, timeline => timeline.fromTo(card, { y: desktop ? 48 : 30, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.1 })));
       onceTimeline('note', query('.creative-note'), timeline => timeline.fromTo('.creative-note p', { y: 60, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, duration: 1.25 }));
 
       // Image and pointer layers are independent: scroll never overwrites mouse movement.
@@ -170,7 +179,8 @@ export function usePortfolioMotion(rootRef, filter, experienceIndex) {
             onceTimeline(`project:${id}`, card, timeline => {
               timeline.fromTo(card, { y: desktop ? 60 : 35, rotationX: desktop ? 5 : 0, opacity: 0 }, { y: 0, rotationX: 0, opacity: 1, duration: 1.15 }, index % 2 * .15)
                 .fromTo(reveal, { clipPath: SIDE_CLIP }, { clipPath: OPEN_CLIP, duration: 1.35, ease: 'expo.out' }, .15 + index % 2 * .15)
-                .fromTo(image, { scale: 1.1 }, { scale: 1, duration: 1.7 }, .15 + index % 2 * .15);
+                .fromTo(image, { scale: 1.1 }, { scale: 1, duration: 1.7 }, .15)
+                .fromTo(card.querySelectorAll('.case-kicker, .project-caption, .case-summary, .case-highlights, .case-account-link'), { y: 32, clipPath: BOTTOM_CLIP }, { y: 0, clipPath: OPEN_CLIP, stagger: .1, duration: 1 }, .35);
             });
             imageParallax(card.querySelector('.project-parallax'), visual);
             if (desktop && fine && !reduced) {
@@ -192,6 +202,14 @@ export function usePortfolioMotion(rootRef, filter, experienceIndex) {
 
       // Refresh geometry once assets decode; never poll layout in the animation loop.
       const refresh = () => { if (!disposed) ScrollTrigger.refresh(); };
+      const disclosureContext = gsap.context(() => {}, root);
+      const onDisclosure = event => {
+        if (!event.target.matches('.case-process')) return;
+        refresh();
+        if (event.target.open && !reduced) disclosureContext.add(() => gsap.fromTo(event.target.querySelectorAll('.case-details > div'), { y: 24, opacity: 0, clipPath: BOTTOM_CLIP }, { y: 0, opacity: 1, clipPath: OPEN_CLIP, duration: .8, stagger: .09, ease: 'power3.out', overwrite: true }));
+      };
+      root.addEventListener('toggle', onDisclosure, true);
+      cleanups.push(() => { root.removeEventListener('toggle', onDisclosure, true); disclosureContext.revert(); });
       all('img').forEach(image => { if (!image.complete) { image.addEventListener('load', refresh, { once: true }); cleanups.push(() => image.removeEventListener('load', refresh)); } });
       document.fonts?.ready.then(refresh);
       cleanups.push(observeMotionVisibility({ root, gsap, lenis, raf, syncHeroVideo: () => { syncHeroVideo(); ScrollTrigger.update(); } }));
@@ -210,5 +228,12 @@ export function usePortfolioMotion(rootRef, filter, experienceIndex) {
   }, [rootRef]);
 
   useLayoutEffect(() => { rebuildCards.current(); }, [filter]);
-  useLayoutEffect(() => { ScrollTrigger.refresh(); }, [experienceIndex]);
+  useLayoutEffect(() => {
+    ScrollTrigger.refresh();
+    if (expandedExperience === null || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const context = gsap.context(() => {
+      gsap.fromTo('.experience-panel:not([hidden]) li', { y: 25, opacity: 0, clipPath: BOTTOM_CLIP }, { y: 0, opacity: 1, clipPath: OPEN_CLIP, duration: .8, stagger: .07, ease: 'power3.out' });
+    }, rootRef.current);
+    return () => context.revert();
+  }, [expandedExperience, rootRef]);
 }

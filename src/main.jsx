@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { profile, projects, experiences, strengths, skills, asset } from './content';
-import { MotionText, RevealLine } from './MotionText';
+import { MotionText, RevealLine, MetricValue } from './MotionText';
 import AmbientParticles from './AmbientParticles';
 import { usePortfolioMotion } from './usePortfolioMotion';
 import './styles.css';
 import './motion.css';
+import './refinement.css';
 
 function Arrow({ diagonal = false, className = '' }) {
   return <svg className={`arrow ${className}`} viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d={diagonal ? 'M5 19 19 5M5 5h14v14' : 'M4 12h15m-6-6 6 6-6 6'} stroke="currentColor" strokeWidth="1.6" /></svg>;
@@ -15,7 +16,7 @@ function SectionLabel({ children, number }) { return <div className="section-lab
 
 function App() {
   const [filter, setFilter] = useState('全部案例');
-  const [experienceIndex, setExperienceIndex] = useState(0);
+  const [expandedExperience, setExpandedExperience] = useState(null);
   const [selected, setSelected] = useState(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [active, setActive] = useState('home');
@@ -27,7 +28,7 @@ function App() {
   const dialogRef = useRef(null);
   const triggerRef = useRef(null);
   const toastTimer = useRef(null);
-  usePortfolioMotion(siteRef, filter, experienceIndex);
+  usePortfolioMotion(siteRef, filter, expandedExperience);
 
   useEffect(() => { heroVideo.current.dataset.userPaused = String(paused); }, [paused]);
 
@@ -67,6 +68,7 @@ function App() {
   const navItems = [['home', '首页'], ['about', '关于我'], ['work', '精选作品'], ['expertise', '创作优势']];
 
   return <div className="portfolio-site" ref={siteRef}>
+    <div className="reading-progress" aria-hidden="true"><span/></div>
     <header className="site-header">
       <div className="header-glass" aria-hidden="true"/>
       <a className="wordmark wordmark--name" href="#home" aria-label="王聪聪，返回首页">王聪聪</a>
@@ -107,15 +109,16 @@ function App() {
             <h2 className="motion-heading" aria-label="从内容出发，让增长发生。"><RevealLine><MotionText>从内容出发，</MotionText></RevealLine><RevealLine><span className="serif-accent"><MotionText>让增长发生。</MotionText></span></RevealLine></h2>
             <p>{profile.introduction}</p><p className="muted">{profile.background}</p>
             <div className="profile-contacts"><span><i className="live-dot"/>{profile.age} · {profile.education} · {profile.availability}</span><a href={`mailto:${profile.email}`}>{profile.email}<Arrow diagonal /></a></div>
-            <div className="stats resume-stats">{profile.stats.map(stat => <div key={stat.label}><strong>{stat.value}</strong><small>{stat.label}</small></div>)}</div>
+            <div className="stats resume-stats">{profile.stats.map(stat => <div key={stat.label}><MetricValue value={stat.value}/><small>{stat.label}</small></div>)}</div>
           </div>
         </div>
         <div className="experience-block">
           <div className="experience-intro"><span className="eyebrow">MY JOURNEY / 工作经历</span><h3 className="motion-heading" aria-label="4年经历，连接内容与生意。"><RevealLine><MotionText>4年经历，</MotionText></RevealLine><RevealLine><MotionText>连接内容</MotionText></RevealLine><RevealLine><span className="serif-accent"><MotionText>与生意。</MotionText></span></RevealLine></h3><p>从选题到内容，<br/>从账号增长到商业转化。</p><div className="journey-tags" aria-label="内容领域"><span>教育内容</span><span>知识 IP</span><span>AI 学习机</span></div><a className="resume-link" href={profile.resume} download="王聪聪-短视频编导.pdf">下载完整简历 <Arrow diagonal /></a></div>
-          <div className="timeline experience-deck">
-            <div className="deck-heading"><div><span className="deck-kicker">EXPERIENCE COLLECTION</span><p>抽取一段经历，了解我的工作现场。</p></div><span className="deck-count">{String(experienceIndex + 1).padStart(2, '0')} <i>/</i> {String(experiences.length).padStart(2, '0')}</span></div>
-            <div className="deck-stage" aria-live="polite" aria-atomic="true">{experiences.map((item, index) => index === experienceIndex && <article className="experience-card" key={item.date} aria-label={`工作经历 ${index + 1}：${item.detail}`}><div className="experience-card-top"><time>{item.date}</time><span>CAREER / {String(index + 1).padStart(2, '0')}</span></div><div><h4>{item.title}</h4><span className="company">{item.detail}</span><ul className="experience-points">{item.points.map(point => <li key={point.title}><strong>{point.title}</strong><p>{point.text}</p></li>)}</ul></div></article>)}</div>
-            <div className="deck-controls"><div className="deck-dots" aria-label="选择工作经历">{experiences.map((item, index) => <button key={item.date} type="button" className={index === experienceIndex ? 'active' : ''} aria-label={`查看${item.detail}工作经历`} aria-pressed={index === experienceIndex} onClick={() => setExperienceIndex(index)} />)}</div><span className="deck-hint">切换卡片，查看完整经历</span><button type="button" className="deck-arrow" aria-label="上一段工作经历" onClick={() => setExperienceIndex((experienceIndex - 1 + experiences.length) % experiences.length)}>←</button><button type="button" className="deck-next" aria-label="下一段工作经历" onClick={() => setExperienceIndex((experienceIndex + 1) % experiences.length)}>抽取下一张 <span>↗</span></button></div>
+          <div className="timeline experience-accordion">
+            {experiences.map((item, index) => <article className={`experience-item ${expandedExperience === index ? 'is-open' : ''}`} key={item.date}>
+              <h4 className="experience-toggle-heading"><button type="button" className="experience-toggle" aria-expanded={expandedExperience === index} aria-controls={`experience-panel-${index}`} id={`experience-toggle-${index}`} onClick={() => setExpandedExperience(expandedExperience === index ? null : index)}><span className="experience-toggle-copy"><time>{item.date}</time><span className="experience-role">{item.title}</span><span className="company">{item.detail}</span></span><span className="experience-toggle-action"><span className="experience-hint">{expandedExperience === index ? '收起详情' : '展开详情'}</span><span className="experience-chevron" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m6 9 6 6 6-6" stroke="currentColor" strokeWidth="1.5"/></svg></span></span></button></h4>
+              <div className="experience-panel" id={`experience-panel-${index}`} role="region" aria-labelledby={`experience-toggle-${index}`} hidden={expandedExperience !== index}><ul className="experience-points">{item.points.map(point => <li key={point.title}><strong>{point.title}</strong><p>{point.text}</p></li>)}</ul></div>
+            </article>)}
           </div>
         </div>
       </section>
@@ -125,17 +128,17 @@ function App() {
           <div className="work-heading"><div><div className="eyebrow">从定位与内容，到增长与转化。</div><h2 className="motion-heading" aria-label="作品集"><RevealLine><MotionText>作品</MotionText><span className="serif-accent"><MotionText>集</MotionText></span></RevealLine></h2></div><div className="filters" role="group" aria-label="按案例类型筛选">{['全部案例', '账号增长', '品牌内容'].map(item => <button key={item} aria-pressed={filter === item} className={filter === item ? 'selected' : ''} onClick={() => setFilter(item)}>{item}<span>{String(item === '全部案例' ? projects.length : projects.filter(project => project.category === item).length).padStart(2, '0')}</span></button>)}</div></div>
           <div className="project-grid account-projects">{projects.filter(project => filter === '全部案例' || project.category === filter).map(project => <article className={`project-card project-${project.id}`} key={project.id} data-project-id={project.id}>
             <button className="project-visual" onClick={event => openProject(project, event)} aria-label={`查看${project.title}账号截图`}><span className="project-cover-reveal"><span className="project-parallax"><span className="project-pointer"><img src={project.poster} alt={`${project.title}账号截图，摘自简历`} loading="lazy"/></span></span></span><span className="project-shade"/><span className="project-top"><span>NO. {project.id} / {project.category}</span><span>{project.duration}</span></span><span className="project-play"><Arrow diagonal/></span><span className="project-bottom"><span>{project.format}</span><span>VIEW ACCOUNT <Arrow diagonal/></span></span></button>
-            <div className="project-caption"><div><h3>{project.title}</h3><p>{project.subtitle}</p></div><a href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`访问${project.title}抖音账号`}><Arrow diagonal/></a></div>
-            <div className="case-highlights">{project.highlights.map(value => <span key={value}>{value}</span>)}</div>
-            <div className="case-details">{project.details.map(item => <div key={item.title}><h4>{item.title}</h4><p>{item.text}</p></div>)}</div>
-            <a className="case-account-link" href={project.url} target="_blank" rel="noopener noreferrer">查看抖音账号 <Arrow diagonal/></a>
+            <div className="case-overview"><span className="case-kicker">CASE {project.id} / {project.category}</span><div className="project-caption"><div><h3>{project.title}</h3><p>{project.subtitle}</p></div><a href={project.url} target="_blank" rel="noopener noreferrer" aria-label={`访问${project.title}抖音账号`}><Arrow diagonal/></a></div>
+            <p className="case-summary">{project.description}</p><div className="case-highlights">{project.highlights.map(value => <span key={value}>{value}</span>)}</div>
+            <a className="case-account-link" href={project.url} target="_blank" rel="noopener noreferrer">查看抖音账号 <Arrow diagonal/></a></div>
+            <details className="case-process"><summary><span>查看项目拆解 <small>策略 / 执行 / 转化</small></span><span className="disclosure-plus" aria-hidden="true"/></summary><div className="case-details">{project.details.map((item, index) => <div key={item.title}><span className="case-detail-index" aria-hidden="true">0{index + 1}</span><div><h4>{item.title}</h4><p>{item.text}</p></div></div>)}</div></details>
           </article>)}</div>
           <div className="work-footnote"><span>数据及账号截图以所提供简历为准。</span><span>STRATEGY / CONTENT / GROWTH</span></div>
         </div>
       </section>
 
       <section id="expertise" className="expertise section wrap"><SectionLabel number="04">MY CREATIVE DNA</SectionLabel><div className="expertise-heading"><h2 className="motion-heading" aria-label="让创意落地，让内容生长。"><RevealLine><MotionText>让创意落地，</MotionText></RevealLine><RevealLine><span className="serif-accent"><MotionText>让内容生长。</MotionText></span></RevealLine></h2><p>产品理解、选题嗅觉、IP 打造、AI 提效。<br/>把策划、制作、运营连接成完整链路。</p></div>
-        <div className="strength-grid resume-strengths">{strengths.map(item => <article className="strength-card" key={item.no}><div className="strength-top"><span>{item.no} /</span><span>{item.en}</span></div><div className="strength-symbol">{item.mark}</div><h3>{item.title}</h3><p>{item.text}</p><div className="strength-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>)}</div>
+        <div className="strength-grid resume-strengths">{strengths.map(item => <article className="strength-card" key={item.no}><div className="strength-top"><span>{item.no} /</span><span>{item.en}</span></div><div className="strength-symbol" aria-hidden="true">{item.mark}</div><h3>{item.title}</h3><p>{item.text}</p><div className="strength-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div></article>)}</div>
         <div className="skills-block"><div className="eyebrow">TOOLS OF THE TRADE / 专业技能</div><div className="skills-grid">{skills.map(item => <article className="skill-card" key={item.title}><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></div>
         <div className="creative-note"><span>“</span><p>让内容有方法，<br/>让创意<span>有落地的路径。</span></p><small>WANG CONGCONG / CREATIVE NOTES</small></div>
       </section>
