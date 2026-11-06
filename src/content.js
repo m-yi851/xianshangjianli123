@@ -4,7 +4,7 @@ export const asset = filename => `${import.meta.env.BASE_URL}assets/${filename}`
 export const profile = {
   name: '王聪聪', englishName: 'WANG CONGCONG', role: '短视频编导 / 内容运营',
   age: '26 岁', education: '本科', availability: '随时到岗',
-  email: '1904578838@qq.com', phone: '19833199685', resume: asset('wang-congcong-resume.pdf'),
+  email: '1904578838@qq.com', phone: '19833199685', resume: asset('wang-congcong-resume-0773c4f3.pdf'),
   introduction: '拥有 4 年编导运营经验，专注教育赛道的内容策划、IP 打造与账号增长。从目标人群与产品理解出发，完成选题、脚本、拍摄剪辑、多平台分发和数据复盘。',
   background: '擅长从评论区、私信和热点中提炼真实需求，设计开头 3 秒钩子与内容埋点，建立爆款拆解 SOP 与元素复用库。基于 Agent 平台自建 5 个工作流 Skill，覆盖对标拆解、选题库搭建、文案框架质控等环节。',
   stats: [
